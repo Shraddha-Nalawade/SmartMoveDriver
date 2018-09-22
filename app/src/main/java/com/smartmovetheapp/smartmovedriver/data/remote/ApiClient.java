@@ -12,7 +12,7 @@ public class ApiClient {
 
     public static AppApi create() { return create(HttpUrl.parse(BASE_URL)); }
 
-    private static final String BASE_URL = "http://d2244b62.ngrok.io/";
+    private static final String BASE_URL = "https://smartmoveweb.azurewebsites.net/";
 
     private static AppApi create(HttpUrl httpUrl) {
         HttpLoggingInterceptor logger = new HttpLoggingInterceptor(
