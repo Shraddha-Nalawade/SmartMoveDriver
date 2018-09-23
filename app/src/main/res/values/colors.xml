@@ -26,4 +26,5 @@
     <color name="colorAccent">#38ada9</color><!--second suggestion-->
     <color name="colorWhite">#ffffff</color>
     <color name="colorErrorRed">#FF0033</color>
+    <color name="colorBg">#e7e7e7</color>
 </resources>

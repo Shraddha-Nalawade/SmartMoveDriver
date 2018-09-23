@@ -4,20 +4,60 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
+import com.smartmovetheapp.smartmovedriver.data.remote.ApiClient;
+import com.smartmovetheapp.smartmovedriver.data.remote.model.Order;
+import com.smartmovetheapp.smartmovedriver.data.remote.model.TripResponse;
+import com.smartmovetheapp.smartmovedriver.data.repository.SessionRepository;
+import com.smartmovetheapp.smartmovedriver.ui.base.BaseActivity;
 import com.smartmovetheapp.smartmovedriver.ui.help.HelpActivity;
 import com.smartmovetheapp.smartmovedriver.R;
+import com.smartmovetheapp.smartmovedriver.ui.tripdetail.TripDetailActivity;
 import com.smartmovetheapp.smartmovedriver.ui.trips.TripActivity;
+import com.smartmovetheapp.smartmovedriver.ui.trips.TripAdapter;
 
-public class HomeActivity extends AppCompatActivity
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private RecyclerView rvTrips;
+    private TextView txtEmptyTrips;
+    private TripAdapter tripAdapter;
+    private Snackbar loadingSnackbar;
+
+    private final Callback<List<Order>> tripCallback = new Callback<List<Order>>() {
+        @Override
+        public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
+            hideLoading();
+            if (response.isSuccessful()) {
+                setTrips(response.body());
+            } else {
+                showError(R.string.default_error);
+            }
+        }
+
+        @Override
+        public void onFailure(Call<List<Order>> call, Throwable t) {
+            hideLoading();
+            showError(R.string.default_error);
+        }
+    };
 
     public static void start(Context context) {
         Intent starter = new Intent(context, HomeActivity.class);
@@ -39,6 +79,41 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        loadingSnackbar = Snackbar.make(findViewById(android.R.id.content),
+                "Getting active trips..", Snackbar.LENGTH_INDEFINITE);
+
+        rvTrips = findViewById(R.id.rv_trips);
+        txtEmptyTrips = findViewById(R.id.txt_empty_trips);
+
+        rvTrips.setLayoutManager(new LinearLayoutManager(this));
+        tripAdapter = new TripAdapter(order ->
+                TripDetailActivity.start(this, order));
+        rvTrips.setAdapter(tripAdapter);
+
+        performServerCallToGetOrders();
+    }
+
+    private void performServerCallToGetOrders() {
+        showLoading();
+        ApiClient.create().getTrips(Long.valueOf(SessionRepository.getInstance().getDriverId()))
+                .enqueue(tripCallback);
+    }
+
+    private void setTrips(List<Order> trips) {
+        if (trips == null || trips.isEmpty()) {
+            txtEmptyTrips.setVisibility(View.VISIBLE);
+        } else {
+            tripAdapter.submitList(trips);
+        }
+    }
+
+    private void showLoading() {
+        loadingSnackbar.show();
+    }
+
+    private void hideLoading() {
+        loadingSnackbar.dismiss();
     }
 
     @Override

@@ -12,8 +12,10 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.smartmovetheapp.smartmovedriver.R;
-import com.smartmovetheapp.smartmovedriver.data.remote.model.LoginResponse;
+import com.smartmovetheapp.smartmovedriver.data.remote.model.User;
 import com.smartmovetheapp.smartmovedriver.data.repository.AuthRepository;
+import com.smartmovetheapp.smartmovedriver.data.repository.SessionRepository;
+import com.smartmovetheapp.smartmovedriver.data.sharedpref.StateMachine;
 import com.smartmovetheapp.smartmovedriver.ui.home.HomeActivity;
 
 import java.net.HttpURLConnection;
@@ -29,24 +31,20 @@ public class LoginActivity extends AppCompatActivity {
     private EditText edtPassword;
     private ProgressBar pbLoading;
 
-    private final Callback<LoginResponse> loginCallback = new Callback<LoginResponse>() {
+    private final Callback<User> loginCallback = new Callback<User>() {
         @Override
-        public void onFailure(Call<LoginResponse> call, Throwable t) {
+        public void onFailure(Call<User> call, Throwable t) {
             hideLoading();
             showError("Please try again we are facing some issue");
         }
 
         @Override
-        public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+        public void onResponse(Call<User> call, Response<User> response) {
             hideLoading();
-            moveToHomeScreen(); //todo: remove this - used for skipping Login API call
             if (response.isSuccessful() && response.body() != null) {
-                if (response.body() != null) {
-                    //SessionRepository.instance().storeUser(response.body());
-                    moveToHomeScreen();
-                } else {
-                    showError("Please try again we are facing some issue");
-                }
+                SessionRepository.getInstance().storeUser(response.body());
+                StateMachine.changeStateTo(StateMachine.State.LOGGED_IN);
+                moveToHomeScreen();
             } else {
                 if (response.code() == HttpURLConnection.HTTP_BAD_REQUEST) {
                     showError("Invalid email/password");
@@ -100,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
             validateFields();
             showLoading();
             performServerCall();
-            //moveToHomeScreen(); //todo: remove once login call implemented
+//            moveToHomeScreen(); //todo: remove once login call implemented
         } catch (IllegalArgumentException error) {
             showError(error.getMessage());
         }
