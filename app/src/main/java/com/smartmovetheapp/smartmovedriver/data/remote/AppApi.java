@@ -2,7 +2,7 @@ package com.smartmovetheapp.smartmovedriver.data.remote;
 
 import com.smartmovetheapp.smartmovedriver.data.remote.model.Driver;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.Order;
-import com.smartmovetheapp.smartmovedriver.data.remote.model.TripResponse;
+import com.smartmovetheapp.smartmovedriver.data.remote.model.OrderBid;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.User;
 
 import java.util.List;
@@ -20,6 +20,9 @@ public interface AppApi {
 
     @GET("api/TruckOwner/GetNewOrders")
     Call<List<Order>> getTrips(@Query("truckOwnerId") Long truckOwnerId);
+
+    @POST("api/TruckOwner/PlaceBid")
+    Call<Void> placeBid(@Body OrderBid bid);
 
     /*api/TruckOwner/GetMyOrders?truckOwnerId=value
     *

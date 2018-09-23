@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.smartmovetheapp.smartmovedriver.R;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.Order;
+import com.smartmovetheapp.smartmovedriver.ui.addbid.AddBidActivity;
 import com.smartmovetheapp.smartmovedriver.ui.base.BaseActivity;
 import com.smartmovetheapp.smartmovedriver.util.CalenderUtil;
 
@@ -39,6 +41,8 @@ public class TripDetailActivity extends BaseActivity {
     private SwitchCompat swtElevatorD;
     private TextView txtParkingDistanceD;
     private TextView txtExtraD;
+
+    private CardView cvBidsButton;
 
     public static void start(Context context, Order order) {
         Intent starter = new Intent(context, TripDetailActivity.class);
@@ -81,6 +85,12 @@ public class TripDetailActivity extends BaseActivity {
         swtElevatorD = findViewById(R.id.swt_elevator_d);
         txtParkingDistanceD = findViewById(R.id.txt_parking_distance_d);
         txtExtraD = findViewById(R.id.txt_extra_d);
+
+        cvBidsButton = findViewById(R.id.cv_bids_click);
+
+        cvBidsButton.setOnClickListener(button -> {
+            AddBidActivity.start(this, order.getOrderId());
+        });
 
         populateOrder(order);
     }
