@@ -3,26 +3,26 @@ package com.smartmovetheapp.smartmovedriver.data.remote.model;
 import java.util.List;
 
 public class BidsResponse {
-    private List<OrderBid> runningOrders;
+    private List<OrderBid> PendingBids;
 
-    private List<OrderBid> completedOrders;
+    private List<OrderBid> AcceptedBids;
 
     private List<OrderBid> cancelledOrders;
 
-    public List<OrderBid> getRunningOrders() {
-        return runningOrders;
+    public List<OrderBid> getPendingBids() {
+        return PendingBids;
     }
 
-    public void setRunningOrders(List<OrderBid> runningOrders) {
-        this.runningOrders = runningOrders;
+    public void setPendingBids(List<OrderBid> pendingBids) {
+        this.PendingBids = pendingBids;
     }
 
-    public List<OrderBid> getCompletedOrders() {
-        return completedOrders;
+    public List<OrderBid> getAcceptedBids() {
+        return AcceptedBids;
     }
 
-    public void setCompletedOrders(List<OrderBid> completedOrders) {
-        this.completedOrders = completedOrders;
+    public void setAcceptedBids(List<OrderBid> acceptedBids) {
+        this.AcceptedBids = acceptedBids;
     }
 
     public List<OrderBid> getCancelledOrders() {

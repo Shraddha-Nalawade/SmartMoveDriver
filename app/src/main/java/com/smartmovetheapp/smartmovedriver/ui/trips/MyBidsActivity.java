@@ -43,8 +43,8 @@ public class MyBidsActivity extends BaseActivity {
         public void onResponse(Call<BidsResponse> call, Response<BidsResponse> response) {
             hideLoading();
             if (response.isSuccessful() && response.body() != null) {
-                currentOrders = response.body().getRunningOrders();
-                pastOrders =  response.body().getCompletedOrders();
+                currentOrders = response.body().getPendingBids();
+                pastOrders =  response.body().getAcceptedBids();
 
                 mViewPager.setAdapter(mSectionsPagerAdapter);
             } else {
