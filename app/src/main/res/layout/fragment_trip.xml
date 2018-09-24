@@ -5,7 +5,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.trips.TripActivity$PlaceholderFragment">
+    tools:context=".ui.trips.MyBidActivity$PlaceholderFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_trips"
@@ -21,7 +21,7 @@
         android:id="@+id/txt_empty_trips"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No trips found"
+        android:text="No bids found"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

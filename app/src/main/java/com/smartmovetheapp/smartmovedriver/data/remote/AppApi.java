@@ -1,5 +1,6 @@
 package com.smartmovetheapp.smartmovedriver.data.remote;
 
+import com.smartmovetheapp.smartmovedriver.data.remote.model.BidsResponse;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.Driver;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.Order;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.OrderBid;
@@ -24,9 +25,15 @@ public interface AppApi {
     @POST("api/TruckOwner/PlaceBid")
     Call<Void> placeBid(@Body OrderBid bid);
 
-    /*api/TruckOwner/GetMyOrders?truckOwnerId=value
-    *
-    * api/TruckOwner/GetNewOrders?truckOwnerId=value
-    *
-    * */
+    @POST("api/TruckOwner/StartTrip")
+    Call<Void> startOrder(@Query("orderId") int orderId);
+
+    @POST("api/TruckOwner/EndTrip")
+    Call<Void> endOrder(@Query("orderId") int orderId);
+
+    @POST("api/TruckOwner/CancelTrip")
+    Call<Void> cancelOrder(@Query("orderId") int orderId);
+
+    @GET("api/TruckOwner/GetMyBids")
+    Call<BidsResponse> getMyBids(@Query("truckOwnerId") int orderId);
 }

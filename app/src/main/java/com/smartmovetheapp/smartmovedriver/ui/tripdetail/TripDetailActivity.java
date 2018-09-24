@@ -4,17 +4,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.smartmovetheapp.smartmovedriver.R;
+import com.smartmovetheapp.smartmovedriver.data.remote.ApiClient;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.Order;
 import com.smartmovetheapp.smartmovedriver.ui.addbid.AddBidActivity;
 import com.smartmovetheapp.smartmovedriver.ui.base.BaseActivity;
 import com.smartmovetheapp.smartmovedriver.util.CalenderUtil;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TripDetailActivity extends BaseActivity {
 
@@ -43,6 +50,89 @@ public class TripDetailActivity extends BaseActivity {
     private TextView txtExtraD;
 
     private CardView cvBidsButton;
+    private CardView cvStartButton;
+    private CardView cvEndButton;
+    private CardView cvCancelButton;
+
+    private AlertDialog loading;
+
+    private final Callback<Void> cancelBidCallback = new Callback<Void>() {
+        @Override
+        public void onResponse(Call<Void> call, Response<Void> response) {
+            hideLoading();
+            if (response.isSuccessful()) {
+                new AlertDialog.Builder(TripDetailActivity.this, R.style.SMDatePickerTheme)
+                        .setTitle("Bid has been cancelled.")
+                        .setMessage("Your scheduled Bid has been cancelled successfully.")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", (dialog, which) -> {
+                            dialog.dismiss();
+                            finish();
+                        })
+                        .show();
+            } else {
+                showError(R.string.default_error);
+            }
+        }
+
+        @Override
+        public void onFailure(Call<Void> call, Throwable t) {
+            hideLoading();
+            showError(R.string.default_error);
+        }
+    };
+
+    private final Callback<Void> startOrderCallback = new Callback<Void>() {
+        @Override
+        public void onResponse(Call<Void> call, Response<Void> response) {
+            hideLoading();
+            if (response.isSuccessful()) {
+                new AlertDialog.Builder(TripDetailActivity.this, R.style.SMDatePickerTheme)
+                        .setTitle("Order has been started.")
+//                        .setMessage("")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", (dialog, which) -> {
+                            dialog.dismiss();
+                            finish();
+                        })
+                        .show();
+            } else {
+                showError(R.string.default_error);
+            }
+        }
+
+        @Override
+        public void onFailure(Call<Void> call, Throwable t) {
+            hideLoading();
+            showError(R.string.default_error);
+        }
+    };
+
+    private final Callback<Void> endOrderCallback = new Callback<Void>() {
+        @Override
+        public void onResponse(Call<Void> call, Response<Void> response) {
+            hideLoading();
+            if (response.isSuccessful()) {
+                new AlertDialog.Builder(TripDetailActivity.this, R.style.SMDatePickerTheme)
+                        .setTitle("Order has been ended.")
+                        //.setMessage("Your scheduled Bid has been cancelled successfully.")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", (dialog, which) -> {
+                            dialog.dismiss();
+                            finish();
+                        })
+                        .show();
+            } else {
+                showError(R.string.default_error);
+            }
+        }
+
+        @Override
+        public void onFailure(Call<Void> call, Throwable t) {
+            hideLoading();
+            showError(R.string.default_error);
+        }
+    };
 
     public static void start(Context context, Order order) {
         Intent starter = new Intent(context, TripDetailActivity.class);
@@ -87,12 +177,95 @@ public class TripDetailActivity extends BaseActivity {
         txtExtraD = findViewById(R.id.txt_extra_d);
 
         cvBidsButton = findViewById(R.id.cv_bids_click);
+        cvStartButton = findViewById(R.id.cv_start_click);
+        cvEndButton = findViewById(R.id.cv_end_click);
+        cvCancelButton = findViewById(R.id.cv_cancel_click);
+
+        loading = new AlertDialog.Builder(this, R.style.SMDatePickerTheme)
+                .setMessage("loading..")
+                .setCancelable(false)
+                .create();
 
         cvBidsButton.setOnClickListener(button -> {
             AddBidActivity.start(this, order.getOrderId());
         });
+        cvStartButton.setOnClickListener(button -> {
+            onStartOrderClick();
+        });
+        cvEndButton.setOnClickListener(button -> {
+            onEndOrderClick();
+        });
+        cvCancelButton.setOnClickListener(button -> {
+            onCancelBidClick();
+        });
 
         populateOrder(order);
+        handleButtonVisibility(order.getOrderStatus());
+    }
+
+    private void handleButtonVisibility(String orderStatus) {
+        long currentTimeMillis = System.currentTimeMillis();
+        switch (orderStatus) {
+            case "PENDING":
+                cvBidsButton.setVisibility(View.VISIBLE);
+                cvStartButton.setVisibility(View.GONE);
+                cvEndButton.setVisibility(View.GONE);
+                cvCancelButton.setVisibility(View.GONE);
+                break;
+            case "CONFIRMED":
+                cvBidsButton.setVisibility(View.GONE);
+
+                if (CalenderUtil.getStartOfDayTime(order.getDate()) <= currentTimeMillis
+                        && CalenderUtil.getEndOfDayTime(order.getDate()) >= currentTimeMillis) {
+
+                    cvStartButton.setVisibility(View.VISIBLE);
+                    cvEndButton.setVisibility(View.GONE);
+                } else {
+                    cvStartButton.setVisibility(View.GONE);
+                    cvEndButton.setVisibility(View.GONE);
+                }
+                cvCancelButton.setVisibility(View.VISIBLE);
+                break;
+            case "DELIVERING":
+                cvBidsButton.setVisibility(View.GONE);
+
+                if (CalenderUtil.getStartOfDayTime(order.getDate()) <= currentTimeMillis
+                        && CalenderUtil.getEndOfDayTime(order.getDate()) >= currentTimeMillis) {
+
+                    cvStartButton.setVisibility(View.GONE);
+                    cvEndButton.setVisibility(View.VISIBLE);
+                } else {
+                    cvStartButton.setVisibility(View.GONE);
+                    cvEndButton.setVisibility(View.GONE);
+                }
+                cvCancelButton.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
+    private void onStartOrderClick() {
+        showLoading("Starting order..");
+        ApiClient.create().startOrder(order.getOrderId())
+                .enqueue(startOrderCallback);
+    }
+
+    private void onEndOrderClick() {
+        showLoading("Ending order..");
+        ApiClient.create().endOrder(order.getOrderId())
+                .enqueue(endOrderCallback);
+    }
+
+    private void onCancelBidClick() {
+        showLoading("Cancelling bid..");
+    }
+
+    private void showLoading(String loadingMessage) {
+        loading.setMessage(loadingMessage);
+        loading.show();
+    }
+
+    private void hideLoading() {
+        loading.dismiss();
     }
 
     private void populateOrder(Order order) {

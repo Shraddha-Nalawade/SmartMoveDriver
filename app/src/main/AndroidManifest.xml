@@ -33,15 +33,13 @@
             android:label="@string/title_activity_help"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.trips.TripActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_trip"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".ui.tripdetail.TripDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.addbid.AddBidActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.trips.MyBidsActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data

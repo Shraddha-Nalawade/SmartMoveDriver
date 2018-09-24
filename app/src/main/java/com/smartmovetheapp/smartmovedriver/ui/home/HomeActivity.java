@@ -18,15 +18,16 @@ import android.widget.TextView;
 
 import com.smartmovetheapp.smartmovedriver.data.remote.ApiClient;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.Order;
-import com.smartmovetheapp.smartmovedriver.data.remote.model.TripResponse;
 import com.smartmovetheapp.smartmovedriver.data.repository.SessionRepository;
 import com.smartmovetheapp.smartmovedriver.ui.base.BaseActivity;
 import com.smartmovetheapp.smartmovedriver.ui.help.HelpActivity;
 import com.smartmovetheapp.smartmovedriver.R;
+import com.smartmovetheapp.smartmovedriver.ui.splash.SplashActivity;
 import com.smartmovetheapp.smartmovedriver.ui.tripdetail.TripDetailActivity;
-import com.smartmovetheapp.smartmovedriver.ui.trips.TripActivity;
+import com.smartmovetheapp.smartmovedriver.ui.trips.MyBidsActivity;
 import com.smartmovetheapp.smartmovedriver.ui.trips.TripAdapter;
 
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -104,6 +105,15 @@ public class HomeActivity extends BaseActivity
         if (trips == null || trips.isEmpty()) {
             txtEmptyTrips.setVisibility(View.VISIBLE);
         } else {
+            Collections.sort(trips, (firstOrder, secondOrder) -> {
+                if (firstOrder.getOrderStatus().equals("CONFIRMED")) {
+                    return -1;
+                } else if (secondOrder.getOrderStatus().equals("CONFIRMED")) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
             tripAdapter.submitList(trips);
         }
     }
@@ -153,7 +163,7 @@ public class HomeActivity extends BaseActivity
         if (id == R.id.nav_profile) {
 
         } else if (id == R.id.nav_trips) {
-            TripActivity.start(this);
+            MyBidsActivity.start(this);
         } else if (id == R.id.nav_invite) {
 
         } else if (id == R.id.nav_help) {
@@ -162,6 +172,10 @@ public class HomeActivity extends BaseActivity
 
         } else if (id == R.id.nav_settings) {
 
+        } else if (id == R.id.nav_logout) {
+            SessionRepository.getInstance().logout();
+            SplashActivity.start(this);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

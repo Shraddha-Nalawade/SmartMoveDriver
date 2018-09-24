@@ -21,6 +21,6 @@
     <string name="default_error">We are facing some issue, try after sometime.</string>
     <string name="snackbar_internet_unavailable">Oops! No internet connection…</string>
     <string name="title_activity_trip">Trips</string>
-    <string name="tab_text_1">Running Trips</string>
-    <string name="tab_text_2">Finished Trips</string>
+    <string name="tab_text_1">Pending Bids</string>
+    <string name="tab_text_2">Accepted Bids</string>
 </resources>

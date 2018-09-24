@@ -32,6 +32,10 @@ public class SessionRepository {
         }
     }
 
+    public void logout() {
+
+    }
+
     private interface SharedPrefKey {
         String LOGGED_IN_USER = "logged_in_user";
     }
