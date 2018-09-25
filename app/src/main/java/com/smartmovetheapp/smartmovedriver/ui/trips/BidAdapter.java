@@ -75,10 +75,16 @@ public class BidAdapter extends ListAdapter<OrderBid, BidAdapter.ViewHolder> {
         public void bindTo(OrderBid orderBid) {
             cvSelect.setTag(orderBid);
 
+            if (!orderBid.getBidStatus().equals("PENDING")) {
+                cvSelect.setVisibility(View.GONE);
+            } else {
+                cvSelect.setVisibility(View.VISIBLE);
+            }
+
             DecimalFormat df2 = new DecimalFormat(".##");
-            txtAmount.setText(df2.format(orderBid.getBidAmount()) + "$");
+            txtAmount.setText("$" + df2.format(orderBid.getBidAmount()));
             txtDetails.setText(orderBid.getNumberOfTrips() + " trips for " + orderBid.getNumberOfHours() + "Hrs");
-            txtDateTime.setText(CalenderUtil.getDisplayDateTime(orderBid.getDate()));
+            txtDateTime.setText(CalenderUtil.getDisplayDateTime(orderBid.getTime()));
             txtStatus.setText(orderBid.getBidStatus());
         }
     }

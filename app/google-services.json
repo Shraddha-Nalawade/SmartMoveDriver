@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "1022847178549",
+    "firebase_url": "https://smartmove-216805.firebaseio.com",
+    "project_id": "smartmove-216805",
+    "storage_bucket": "smartmove-216805.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1022847178549:android:d737b01ab9d9aede",
+        "android_client_info": {
+          "package_name": "com.smartmovetheapp.smartmove"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1022847178549-v3lnglisu1hottf3vl0mg7a9orl97tsc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwKh9DYcVi0vF-NBKY7PNOCYm8RakvdfE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1022847178549:android:aa398bf813352580",
+        "android_client_info": {
+          "package_name": "com.smartmovetheapp.smartmovedriver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1022847178549-v3lnglisu1hottf3vl0mg7a9orl97tsc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwKh9DYcVi0vF-NBKY7PNOCYm8RakvdfE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -17,6 +17,7 @@ import com.smartmovetheapp.smartmovedriver.data.remote.ApiClient;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.Order;
 import com.smartmovetheapp.smartmovedriver.ui.addbid.AddBidActivity;
 import com.smartmovetheapp.smartmovedriver.ui.base.BaseActivity;
+import com.smartmovetheapp.smartmovedriver.ui.home.HomeActivity;
 import com.smartmovetheapp.smartmovedriver.util.CalenderUtil;
 
 import retrofit2.Call;
@@ -215,8 +216,8 @@ public class TripDetailActivity extends BaseActivity {
             case "CONFIRMED":
                 cvBidsButton.setVisibility(View.GONE);
 
-                if (CalenderUtil.getStartOfDayTime(order.getDate()) <= currentTimeMillis
-                        && CalenderUtil.getEndOfDayTime(order.getDate()) >= currentTimeMillis) {
+                if (CalenderUtil.getStartOfDayTime(order.getTime()) <= currentTimeMillis
+                        && CalenderUtil.getEndOfDayTime(order.getTime()) >= currentTimeMillis) {
 
                     cvStartButton.setVisibility(View.VISIBLE);
                     cvEndButton.setVisibility(View.GONE);
@@ -224,13 +225,13 @@ public class TripDetailActivity extends BaseActivity {
                     cvStartButton.setVisibility(View.GONE);
                     cvEndButton.setVisibility(View.GONE);
                 }
-                cvCancelButton.setVisibility(View.VISIBLE);
+                cvCancelButton.setVisibility(View.GONE);
                 break;
             case "DELIVERING":
                 cvBidsButton.setVisibility(View.GONE);
 
-                if (CalenderUtil.getStartOfDayTime(order.getDate()) <= currentTimeMillis
-                        && CalenderUtil.getEndOfDayTime(order.getDate()) >= currentTimeMillis) {
+                if (CalenderUtil.getStartOfDayTime(order.getTime()) <= currentTimeMillis
+                        && CalenderUtil.getEndOfDayTime(order.getTime()) >= currentTimeMillis) {
 
                     cvStartButton.setVisibility(View.GONE);
                     cvEndButton.setVisibility(View.VISIBLE);
@@ -238,7 +239,7 @@ public class TripDetailActivity extends BaseActivity {
                     cvStartButton.setVisibility(View.GONE);
                     cvEndButton.setVisibility(View.GONE);
                 }
-                cvCancelButton.setVisibility(View.VISIBLE);
+                cvCancelButton.setVisibility(View.GONE);
                 break;
         }
     }
@@ -247,12 +248,14 @@ public class TripDetailActivity extends BaseActivity {
         showLoading("Starting order..");
         ApiClient.create().startOrder(order.getOrderId())
                 .enqueue(startOrderCallback);
+        HomeActivity.start(this);
     }
 
     private void onEndOrderClick() {
         showLoading("Ending order..");
         ApiClient.create().endOrder(order.getOrderId())
                 .enqueue(endOrderCallback);
+        HomeActivity.start(this);
     }
 
     private void onCancelBidClick() {
@@ -271,7 +274,7 @@ public class TripDetailActivity extends BaseActivity {
     private void populateOrder(Order order) {
         txtPickupPlace.setText(order.getPickupPlace());
         txtDropPlace.setText(order.getDropPlace());
-        txtDateTime.setText(CalenderUtil.getDisplayDateTime(order.getDate()));
+        txtDateTime.setText(CalenderUtil.getDisplayDateTime(order.getTime()));
         txtTruckType.setText(getTruckTypeText(order.getTruckTypeId()));
         txtTripCount.setText(order.getEstimatedNumOfTrips() == null ? "--" : String.valueOf(order.getEstimatedNumOfTrips()));
 

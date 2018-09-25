@@ -45,8 +45,8 @@ public class AddBidActivity extends BaseActivity implements PaymentFragment.Paym
             hideLoading();
             if (response.isSuccessful()) {
                 new AlertDialog.Builder(AddBidActivity.this, R.style.SMDatePickerTheme)
-                        .setTitle("Your bid has been placed.")
-                        .setMessage("We will notify you once customer selects your bid.")
+                        .setTitle("Your Bid has been placed.")
+                        .setMessage("We will notify you once Customer selects your bid.")
                         .setCancelable(false)
                         .setPositiveButton("OK", (dialog, which) -> {
                             dialog.dismiss();
@@ -92,7 +92,7 @@ public class AddBidActivity extends BaseActivity implements PaymentFragment.Paym
         bid = new OrderBid();
 
         loading = new AlertDialog.Builder(this, R.style.SMDatePickerTheme)
-                .setMessage("Creating your bid..")
+                .setMessage("Creating your Bid....")
                 .setCancelable(false)
                 .create();
 

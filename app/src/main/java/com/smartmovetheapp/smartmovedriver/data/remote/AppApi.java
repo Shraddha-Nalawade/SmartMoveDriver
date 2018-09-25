@@ -31,7 +31,7 @@ public interface AppApi {
     @POST("api/TruckOwner/EndTrip")
     Call<Void> endOrder(@Query("orderId") int orderId);
 
-    @POST("api/TruckOwner/CancelTrip")
+    @POST("api/TruckOwner/RemoveMyBid")
     Call<Void> cancelOrder(@Query("orderId") int orderId);
 
     @GET("api/TruckOwner/GetMyBids")

@@ -43,8 +43,8 @@ public class MyBidsActivity extends BaseActivity {
         public void onResponse(Call<BidsResponse> call, Response<BidsResponse> response) {
             hideLoading();
             if (response.isSuccessful() && response.body() != null) {
-                currentOrders = response.body().getPendingBids();
-                pastOrders =  response.body().getAcceptedBids();
+                pendingBids = response.body().getPendingBids();
+                acceptedBids =  response.body().getAcceptedBids();
 
                 mViewPager.setAdapter(mSectionsPagerAdapter);
             } else {
@@ -113,8 +113,8 @@ public class MyBidsActivity extends BaseActivity {
      */
     private ViewPager mViewPager;
 
-    private List<OrderBid> currentOrders;
-    private List<OrderBid> pastOrders;
+    private List<OrderBid> pendingBids;
+    private List<OrderBid> acceptedBids;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,24 +135,20 @@ public class MyBidsActivity extends BaseActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        loadingSnackbar = Snackbar.make(findViewById(android.R.id.content), "Getting bids..", Snackbar.LENGTH_INDEFINITE);
+        loadingSnackbar = Snackbar.make(findViewById(android.R.id.content), "Getting Bids....", Snackbar.LENGTH_INDEFINITE);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
         loading = new AlertDialog.Builder(this, R.style.SMDatePickerTheme)
-                .setMessage("Cancelling your bid..")
+                .setMessage("Cancelling your Bid....")
                 .setCancelable(false)
                 .create();
 
-        performServerCallToGetOrders();
+        performServerCallToGetBids();
     }
 
-    private void performServerCallToGetOrders() {
-        //dummy data
-        //currentOrders = OrderRepository.getStoredListOfOrder();
-        //mViewPager.setAdapter(mSectionsPagerAdapter);
-
+    private void performServerCallToGetBids() {
         showLoading();
         ApiClient.create().getMyBids(SessionRepository.getInstance().getDriverId())
                 .enqueue(bidsCallback);
@@ -211,11 +207,11 @@ public class MyBidsActivity extends BaseActivity {
             BidAdapter tripAdapter = new BidAdapter(this::onCancelBidClick);
             rvTrips.setAdapter(tripAdapter);
 
-            List<OrderBid> orders = contract.getOrders(getArguments().getInt(ARG_SECTION_NUMBER, 1));
-            if (orders == null || orders.isEmpty()) {
+            List<OrderBid> orderBids = contract.getOrderBids(getArguments().getInt(ARG_SECTION_NUMBER, 1));
+            if (orderBids == null || orderBids.isEmpty()) {
                 txtEmptyTrips.setVisibility(View.VISIBLE);
             } else {
-                tripAdapter.submitList(orders);
+                tripAdapter.submitList(orderBids);
             }
 
             /*if (getArguments().getInt(ARG_SECTION_NUMBER, 1) == 2) {
@@ -223,11 +219,11 @@ public class MyBidsActivity extends BaseActivity {
                 return;
             }
 
-            List<Order> orders = OrderRepository.getStoredListOfOrder();
-            if (orders.isEmpty()) {
+            List<Order> orderBids = OrderRepository.getStoredListOfOrder();
+            if (orderBids.isEmpty()) {
                 txtEmptyTrips.setVisibility(View.VISIBLE);
             } else {
-                tripAdapter.submitList(orders);
+                tripAdapter.submitList(orderBids);
             }*/
         }
 
@@ -269,8 +265,8 @@ public class MyBidsActivity extends BaseActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(position + 1, new FragmentContract() {
                 @Override
-                public List<OrderBid> getOrders(int pageNo) {
-                    return pageNo == 1 ? currentOrders : pastOrders;
+                public List<OrderBid> getOrderBids(int pageNo) {
+                    return pageNo == 1 ? pendingBids : acceptedBids;
                 }
 
                 @Override
@@ -302,7 +298,7 @@ public class MyBidsActivity extends BaseActivity {
     }
 
     public interface FragmentContract {
-        List<OrderBid> getOrders(int pageNo);
+        List<OrderBid> getOrderBids(int pageNo);
 
         void onCancelClick(OrderBid orderBid);
     }

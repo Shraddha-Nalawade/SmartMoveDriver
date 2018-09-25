@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.smartmovetheapp.smartmovedriver.data.remote.ApiClient;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.Order;
+import com.smartmovetheapp.smartmovedriver.data.remote.model.User;
 import com.smartmovetheapp.smartmovedriver.data.repository.SessionRepository;
 import com.smartmovetheapp.smartmovedriver.ui.base.BaseActivity;
 import com.smartmovetheapp.smartmovedriver.ui.help.HelpActivity;
@@ -86,6 +87,10 @@ public class HomeActivity extends BaseActivity
 
         rvTrips = findViewById(R.id.rv_trips);
         txtEmptyTrips = findViewById(R.id.txt_empty_trips);
+
+        TextView txtProfileName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.txtUserName);
+        User user = SessionRepository.getInstance().getLoggedInUser();
+        txtProfileName.setText(user.getFirstName() + " " + user.getLastName());
 
         rvTrips.setLayoutManager(new LinearLayoutManager(this));
         tripAdapter = new TripAdapter(order ->
@@ -160,19 +165,19 @@ public class HomeActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_profile) {
+        /*if (id == R.id.nav_profile) {
 
-        } else if (id == R.id.nav_trips) {
+        } else */if (id == R.id.nav_trips) {
             MyBidsActivity.start(this);
-        } else if (id == R.id.nav_invite) {
+        } else /*if (id == R.id.nav_invite) {
 
-        } else if (id == R.id.nav_help) {
+        } else */if (id == R.id.nav_help) {
             HelpActivity.start(this);
-        } else if (id == R.id.nav_notifications) {
+        } else /*if (id == R.id.nav_notifications) {
 
         } else if (id == R.id.nav_settings) {
 
-        } else if (id == R.id.nav_logout) {
+        } else */if (id == R.id.nav_logout) {
             SessionRepository.getInstance().logout();
             SplashActivity.start(this);
             finish();

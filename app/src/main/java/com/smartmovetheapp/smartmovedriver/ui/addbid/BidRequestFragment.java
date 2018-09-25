@@ -108,7 +108,21 @@ public class BidRequestFragment extends Fragment {
     }
 
     private void validateInput() throws IllegalArgumentException {
+        if(edtAmount == null) {
+            throw new IllegalArgumentException("Please enter Bid Amount");
+        }
 
+        if(edtNoOfTrips == null) {
+            throw new IllegalArgumentException("Please enter Number of Trips");
+        }
+
+        if(edtHours == null) {
+            throw new IllegalArgumentException("Please enter Number of Hours");
+        }
+
+        if(txtDateTime == null) {
+            throw new IllegalArgumentException("Please select Date & Time");
+        }
     }
 
     private void onDateTimeClick() {
