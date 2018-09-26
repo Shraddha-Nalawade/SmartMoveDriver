@@ -121,8 +121,10 @@ public class MyBidsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        attachToolbar(toolbar, true);
+        getSupportActionBar().setTitle("My Bids");
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());

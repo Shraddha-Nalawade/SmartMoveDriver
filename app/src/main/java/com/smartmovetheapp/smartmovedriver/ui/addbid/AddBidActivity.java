@@ -21,6 +21,7 @@ import com.smartmovetheapp.smartmovedriver.data.remote.ApiClient;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.OrderBid;
 import com.smartmovetheapp.smartmovedriver.data.repository.SessionRepository;
 import com.smartmovetheapp.smartmovedriver.ui.base.BaseActivity;
+import com.smartmovetheapp.smartmovedriver.ui.home.HomeActivity;
 import com.smartmovetheapp.smartmovedriver.util.CalenderUtil;
 import com.smartmovetheapp.smartmovedriver.util.FragmentHelper;
 
@@ -50,6 +51,8 @@ public class AddBidActivity extends BaseActivity implements PaymentFragment.Paym
                         .setCancelable(false)
                         .setPositiveButton("OK", (dialog, which) -> {
                             dialog.dismiss();
+
+                            HomeActivity.start(AddBidActivity.this);
                             finish();
                         })
                         .show();

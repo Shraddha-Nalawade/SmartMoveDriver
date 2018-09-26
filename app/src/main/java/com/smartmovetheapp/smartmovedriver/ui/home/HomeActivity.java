@@ -7,6 +7,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,6 +43,7 @@ public class HomeActivity extends BaseActivity
     private TextView txtEmptyTrips;
     private TripAdapter tripAdapter;
     private Snackbar loadingSnackbar;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private final Callback<List<Order>> tripCallback = new Callback<List<Order>>() {
         @Override
@@ -63,6 +65,7 @@ public class HomeActivity extends BaseActivity
 
     public static void start(Context context) {
         Intent starter = new Intent(context, HomeActivity.class);
+        starter.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(starter);
     }
 
@@ -82,6 +85,11 @@ public class HomeActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        swipeRefreshLayout = findViewById(R.id.swipe_to_refresh);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            doRefresh();
+        });
+
         loadingSnackbar = Snackbar.make(findViewById(android.R.id.content),
                 "Getting active trips..", Snackbar.LENGTH_INDEFINITE);
 
@@ -98,6 +106,11 @@ public class HomeActivity extends BaseActivity
         rvTrips.setAdapter(tripAdapter);
 
         performServerCallToGetOrders();
+    }
+
+    private void doRefresh() {
+         tripAdapter.submitList(Collections.EMPTY_LIST);
+         performServerCallToGetOrders();
     }
 
     private void performServerCallToGetOrders() {
@@ -125,10 +138,12 @@ public class HomeActivity extends BaseActivity
 
     private void showLoading() {
         loadingSnackbar.show();
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     private void hideLoading() {
         loadingSnackbar.dismiss();
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

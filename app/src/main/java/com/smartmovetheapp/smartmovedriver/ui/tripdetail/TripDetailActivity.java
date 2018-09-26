@@ -11,6 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.smartmovetheapp.smartmovedriver.R;
 import com.smartmovetheapp.smartmovedriver.data.remote.ApiClient;
@@ -68,6 +71,8 @@ public class TripDetailActivity extends BaseActivity {
                         .setCancelable(false)
                         .setPositiveButton("OK", (dialog, which) -> {
                             dialog.dismiss();
+
+                            HomeActivity.start(TripDetailActivity.this);
                             finish();
                         })
                         .show();
@@ -94,6 +99,8 @@ public class TripDetailActivity extends BaseActivity {
                         .setCancelable(false)
                         .setPositiveButton("OK", (dialog, which) -> {
                             dialog.dismiss();
+
+                            HomeActivity.start(TripDetailActivity.this);
                             finish();
                         })
                         .show();
@@ -120,6 +127,8 @@ public class TripDetailActivity extends BaseActivity {
                         .setCancelable(false)
                         .setPositiveButton("OK", (dialog, which) -> {
                             dialog.dismiss();
+
+                            HomeActivity.start(TripDetailActivity.this);
                             finish();
                         })
                         .show();
@@ -256,6 +265,7 @@ public class TripDetailActivity extends BaseActivity {
         ApiClient.create().endOrder(order.getOrderId())
                 .enqueue(endOrderCallback);
         HomeActivity.start(this);
+        //FirebaseMessaging.getInstance().send(new RemoteMessage());
     }
 
     private void onCancelBidClick() {
