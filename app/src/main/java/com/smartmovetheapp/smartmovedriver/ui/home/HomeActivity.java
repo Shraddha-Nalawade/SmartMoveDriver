@@ -88,7 +88,7 @@ public class HomeActivity extends BaseActivity
         rvTrips = findViewById(R.id.rv_trips);
         txtEmptyTrips = findViewById(R.id.txt_empty_trips);
 
-        TextView txtProfileName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.txtUserName);
+        TextView txtProfileName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.txt_user_name);
         User user = SessionRepository.getInstance().getLoggedInUser();
         txtProfileName.setText(user.getFirstName() + " " + user.getLastName());
 

@@ -156,9 +156,11 @@ public class AddBidActivity extends BaseActivity implements PaymentFragment.Paym
         bid.setNumberOfHours(hours);
         bid.setNumberOfTrips(noOfTrips);
 
-        runningOrderState = 2;
+        onNextOfPaymentClick();
+
+        /*runningOrderState = 2;
 
         attachFragment(PaymentFragment.newInstance(), R.id.frm_fragment_container);
-        getSupportActionBar().setTitle("Payment");
+        getSupportActionBar().setTitle("Payment");*/
     }
 }

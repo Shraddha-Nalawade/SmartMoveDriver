@@ -3,6 +3,7 @@ package com.smartmovetheapp.smartmovedriver.data.repository;
 import com.google.gson.Gson;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.User;
 import com.smartmovetheapp.smartmovedriver.data.sharedpref.SharedPrefs;
+import com.smartmovetheapp.smartmovedriver.data.sharedpref.StateMachine;
 
 public class SessionRepository {
 
@@ -33,7 +34,8 @@ public class SessionRepository {
     }
 
     public void logout() {
-
+        StateMachine.changeStateTo(StateMachine.State.NO_LOGIN);
+        SharedPrefs.getInstance().remove(SharedPrefKey.LOGGED_IN_USER);
     }
 
     private interface SharedPrefKey {
