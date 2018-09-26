@@ -33,9 +33,12 @@ public class BidRequestFragment extends Fragment {
     private long orderDateTime;
 
     private OrderRequestActionListener actionListener;
+    private long orderDate;
 
-    public static BidRequestFragment newInstance() {
-        return new BidRequestFragment();
+    public static BidRequestFragment newInstance(long orderDate) {
+        BidRequestFragment fragment = new BidRequestFragment();
+        fragment.orderDate = orderDate;
+        return fragment;
     }
 
     @Nullable
@@ -61,9 +64,9 @@ public class BidRequestFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
 
-        orderDateTime = System.currentTimeMillis();
+        orderDateTime = -1;
 
-        cvDateTime.setOnClickListener(button -> onDateTimeClick());
+        cvDateTime.setOnClickListener(button -> showTimePicker());
         fabNext.setOnClickListener(button -> onNextClick());
     }
 
@@ -108,20 +111,29 @@ public class BidRequestFragment extends Fragment {
     }
 
     private void validateInput() throws IllegalArgumentException {
-        if(edtAmount == null) {
+        if(edtAmount.getText().toString().isEmpty()) {
             throw new IllegalArgumentException("Please enter Bid Amount");
+        } else {
+            try {
+                double amountValue = Double.parseDouble(edtAmount.getText().toString());
+                if (amountValue < 25.0) {
+                    throw new IllegalArgumentException("Please enter Bid Amount more then 25$");
+                }
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Please valid Bid Amount");
+            }
         }
 
-        if(edtNoOfTrips == null) {
-            throw new IllegalArgumentException("Please enter Number of Trips");
+        if(orderDateTime == -1) {
+            throw new IllegalArgumentException("Please select Date & Time");
         }
 
-        if(edtHours == null) {
+        if(edtHours.getText().toString().isEmpty()) {
             throw new IllegalArgumentException("Please enter Number of Hours");
         }
 
-        if(txtDateTime == null) {
-            throw new IllegalArgumentException("Please select Date & Time");
+        if(edtNoOfTrips.getText().toString().isEmpty()) {
+            throw new IllegalArgumentException("Please enter Number of Trips");
         }
     }
 
@@ -147,7 +159,7 @@ public class BidRequestFragment extends Fragment {
 
     private void showTimePicker() {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(orderDateTime);
+        calendar.setTimeInMillis(orderDateTime == -1 ? System.currentTimeMillis() : orderDateTime);
         TimePickerDialog timePickerDialog = new TimePickerDialog(
                 getContext(),
                 R.style.SMDatePickerTheme,
@@ -165,7 +177,7 @@ public class BidRequestFragment extends Fragment {
 
     private void storeSelectedTime(int hourOfDay, int minute) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(orderDateTime);
+        calendar.setTimeInMillis(orderDate);
 
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         calendar.set(Calendar.MINUTE, minute);

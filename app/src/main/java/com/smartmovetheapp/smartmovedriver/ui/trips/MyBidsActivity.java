@@ -62,7 +62,7 @@ public class MyBidsActivity extends BaseActivity {
     private final Callback<Void> cancelBidCallback = new Callback<Void>() {
         @Override
         public void onResponse(Call<Void> call, Response<Void> response) {
-            hideLoading();
+            hideCancelLoading();
             if (response.isSuccessful()) {
                 new AlertDialog.Builder(MyBidsActivity.this, R.style.SMDatePickerTheme)
                         .setTitle("Bid has been removed.")
@@ -80,7 +80,7 @@ public class MyBidsActivity extends BaseActivity {
 
         @Override
         public void onFailure(Call<Void> call, Throwable t) {
-            hideLoading();
+            hideCancelLoading();
             showError(R.string.default_error);
         }
     };
@@ -287,7 +287,7 @@ public class MyBidsActivity extends BaseActivity {
     }
 
     private void performServerCallToCancelBid(OrderBid orderBid) {
-        ApiClient.create().cancelOrder(orderBid.orderId)
+        ApiClient.create().cancelBid(orderBid.bidId)
                 .enqueue(cancelBidCallback);
     }
 

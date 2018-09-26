@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.smartmovetheapp.smartmovedriver.R;
 import com.smartmovetheapp.smartmovedriver.data.remote.ApiClient;
+import com.smartmovetheapp.smartmovedriver.data.remote.model.Order;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.OrderBid;
 import com.smartmovetheapp.smartmovedriver.data.repository.SessionRepository;
 import com.smartmovetheapp.smartmovedriver.ui.base.BaseActivity;
@@ -35,8 +36,10 @@ import retrofit2.Response;
 public class AddBidActivity extends BaseActivity implements PaymentFragment.PaymentActionListener, BidRequestFragment.OrderRequestActionListener {
 
     private static final String ORDER_ID_EXTRA = "order_id";
+    private static final String ORDER_TIME_EXTRA = "order_date";
 
     private int orderId;
+    private long orderDate;
     private OrderBid bid;
 
     private AlertDialog loading;
@@ -74,9 +77,10 @@ public class AddBidActivity extends BaseActivity implements PaymentFragment.Paym
     };
     private int runningOrderState = 1;
 
-    public static void start(Context context, int orderId) {
+    public static void start(Context context, Order order) {
         Intent starter = new Intent(context, AddBidActivity.class);
-        starter.putExtra(ORDER_ID_EXTRA, orderId);
+        starter.putExtra(ORDER_ID_EXTRA, order.getOrderId());
+        starter.putExtra(ORDER_TIME_EXTRA, order.getTime());
         context.startActivity(starter);
     }
 
@@ -88,8 +92,9 @@ public class AddBidActivity extends BaseActivity implements PaymentFragment.Paym
         Toolbar toolbar = findViewById(R.id.toolbar);
         attachToolbar(toolbar, true);
 
-        if (getIntent().hasExtra(ORDER_ID_EXTRA)) {
+        if (getIntent().hasExtra(ORDER_ID_EXTRA) && getIntent().hasExtra(ORDER_TIME_EXTRA)) {
             orderId = getIntent().getIntExtra(ORDER_ID_EXTRA, 0);
+            orderDate = getIntent().getLongExtra(ORDER_TIME_EXTRA, 0);
         }
 
         bid = new OrderBid();
@@ -99,7 +104,7 @@ public class AddBidActivity extends BaseActivity implements PaymentFragment.Paym
                 .setCancelable(false)
                 .create();
 
-        attachFragment(BidRequestFragment.newInstance(), R.id.frm_fragment_container);
+        attachFragment(BidRequestFragment.newInstance(orderDate), R.id.frm_fragment_container);
     }
 
     @Override

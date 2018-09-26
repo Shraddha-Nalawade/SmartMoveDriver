@@ -197,7 +197,7 @@ public class TripDetailActivity extends BaseActivity {
                 .create();
 
         cvBidsButton.setOnClickListener(button -> {
-            AddBidActivity.start(this, order.getOrderId());
+            AddBidActivity.start(this, order);
         });
         cvStartButton.setOnClickListener(button -> {
             onStartOrderClick();
@@ -257,14 +257,14 @@ public class TripDetailActivity extends BaseActivity {
         showLoading("Starting order..");
         ApiClient.create().startOrder(order.getOrderId())
                 .enqueue(startOrderCallback);
-        HomeActivity.start(this);
+        //HomeActivity.start(this);
     }
 
     private void onEndOrderClick() {
         showLoading("Ending order..");
         ApiClient.create().endOrder(order.getOrderId())
                 .enqueue(endOrderCallback);
-        HomeActivity.start(this);
+        //HomeActivity.start(this);
         //FirebaseMessaging.getInstance().send(new RemoteMessage());
     }
 
