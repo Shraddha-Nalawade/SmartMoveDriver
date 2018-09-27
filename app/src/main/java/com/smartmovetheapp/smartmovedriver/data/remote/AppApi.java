@@ -4,6 +4,7 @@ import com.smartmovetheapp.smartmovedriver.data.remote.model.BidsResponse;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.Driver;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.Order;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.OrderBid;
+import com.smartmovetheapp.smartmovedriver.data.remote.model.Rating;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.User;
 
 import java.util.List;
@@ -36,4 +37,7 @@ public interface AppApi {
 
     @GET("api/TruckOwner/GetMyBids")
     Call<BidsResponse> getMyBids(@Query("truckOwnerId") int orderId);
+
+    @POST("api/TruckOwner/RateCustomer")
+    Call<Void> subitRating(@Body Rating rating);
 }

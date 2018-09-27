@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.smartmovetheapp.smartmovedriver.R;
 import com.smartmovetheapp.smartmovedriver.data.remote.ApiClient;
 import com.smartmovetheapp.smartmovedriver.data.remote.model.Order;
+import com.smartmovetheapp.smartmovedriver.data.repository.SessionRepository;
 import com.smartmovetheapp.smartmovedriver.ui.addbid.AddBidActivity;
 import com.smartmovetheapp.smartmovedriver.ui.base.BaseActivity;
 import com.smartmovetheapp.smartmovedriver.ui.home.HomeActivity;
@@ -27,7 +28,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TripDetailActivity extends BaseActivity {
+public class TripDetailActivity extends BaseActivity implements RatingDialog.RatingActionListener {
 
     private static final String ORDER_EXTRA = "order";
     private Order order;
@@ -128,8 +129,15 @@ public class TripDetailActivity extends BaseActivity {
                         .setPositiveButton("OK", (dialog, which) -> {
                             dialog.dismiss();
 
-                            HomeActivity.start(TripDetailActivity.this);
-                            finish();
+                            RatingDialog.getInstance(
+                                    TripDetailActivity.this,
+                                    order.getOrderId(),
+                                    SessionRepository.getInstance().getDriverId(),
+                                    TripDetailActivity.this)
+                                    .show();
+
+                            //HomeActivity.start(TripDetailActivity.this);
+                            //finish();
                         })
                         .show();
             } else {
@@ -314,5 +322,11 @@ public class TripDetailActivity extends BaseActivity {
             default:
                 return "--";
         }
+    }
+
+    @Override
+    public void onSubmitRating() {
+        HomeActivity.start(TripDetailActivity.this);
+        finish();
     }
 }
