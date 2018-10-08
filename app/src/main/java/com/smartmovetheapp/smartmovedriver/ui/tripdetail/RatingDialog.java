@@ -5,7 +5,6 @@ import android.support.v7.app.AlertDialog;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.smartmovetheapp.smartmovedriver.R;
 import com.smartmovetheapp.smartmovedriver.data.remote.ApiClient;
@@ -46,18 +45,18 @@ public class RatingDialog {
     };
     private Button submitButton;
 
-    public static RatingDialog getInstance(Context context, int orderId, int driverId, RatingActionListener actionListener) {
-        return new RatingDialog(context, orderId, driverId, actionListener);
+    public static RatingDialog getInstance(Context context, int orderId, int customerId, RatingActionListener actionListener) {
+        return new RatingDialog(context, orderId, customerId, actionListener);
     }
 
-    private RatingDialog(Context context, int orderId, int driverId, RatingActionListener actionListener) {
+    private RatingDialog(Context context, int orderId, int customerId, RatingActionListener actionListener) {
         this.actionListener = actionListener;
         rating = new Rating();
         rating.setOrderId(orderId);
-        rating.setTruckOwnerId(driverId);
+        rating.setCustomerId(customerId);
 
         alertDialog = new AlertDialog.Builder(context)
-                .setTitle("Rate this customer")
+                .setTitle("Rate this Customer")
                 .setView(R.layout.dialog_rating)
                 .setCancelable(false)
                 .create();

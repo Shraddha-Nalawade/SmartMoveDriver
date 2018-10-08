@@ -2,7 +2,7 @@ package com.smartmovetheapp.smartmovedriver.data.remote.model;
 
 public class Rating {
 
-    private int truckOwnerId;
+    private int customerId;
 
     private int orderId;
 
@@ -24,11 +24,11 @@ public class Rating {
         this.rating = rating;
     }
 
-    public int getTruckOwnerId() {
-        return truckOwnerId;
+    public int getCustomerId() {
+        return customerId;
     }
 
-    public void setTruckOwnerId(int truckOwnerId) {
-        this.truckOwnerId = truckOwnerId;
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 }

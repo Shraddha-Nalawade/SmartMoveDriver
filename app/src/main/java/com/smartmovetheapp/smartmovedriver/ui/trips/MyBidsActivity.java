@@ -287,7 +287,7 @@ public class MyBidsActivity extends BaseActivity {
     }
 
     private void performServerCallToCancelBid(OrderBid orderBid) {
-        ApiClient.create().cancelBid(orderBid.bidId)
+        ApiClient.create().cancelOrderBid(orderBid.bidId)
                 .enqueue(cancelBidCallback);
     }
 

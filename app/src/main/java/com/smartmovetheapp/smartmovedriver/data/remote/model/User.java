@@ -41,6 +41,8 @@ public class User {
 
     private String driverInsurancePolicy;
 
+    private double averageRating;
+
     public String getEmail() {
         return email;
     }
@@ -200,27 +202,12 @@ public class User {
     public void setDriverInsurancePolicy(String driverInsurancePolicy) {
         this.driverInsurancePolicy = driverInsurancePolicy;
     }
-}
 
-/*{
-      "truckOwnerId": 4,
-      "email": "ksoni004@gmail.com",
-      "firstName": "Kishan Bhai",
-      "lastName": "Soni",
-      "phone": "619-272-1296",
-      "address1": "9760 Mesa Springs Way",
-      "address2": "Unit #34",
-      "zipCode": "92126",
-      "city": "San Diego",
-      "state": "California",
-      "truckTypeId": 0,
-      "licensePlate": null,
-      "truckColor": null,
-      "truckMake": null,
-      "truckModel": null,
-      "truckYear": 0,
-      "driverLicenseNumber": "4CK4CK",
-      "vehicleRegNumber": "4444",
-      "driverInsurancePolicy": "44444444",
-      "profilePictureURL": "/Content/driverProfilePictures4_ksoni004@gmail.com_PP.jpg"
-    }*/
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
+    }
+}

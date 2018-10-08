@@ -2,6 +2,8 @@ package com.smartmovetheapp.smartmovedriver.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -12,9 +14,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.smartmovetheapp.smartmovedriver.data.remote.ApiClient;
@@ -28,7 +32,14 @@ import com.smartmovetheapp.smartmovedriver.ui.splash.SplashActivity;
 import com.smartmovetheapp.smartmovedriver.ui.tripdetail.TripDetailActivity;
 import com.smartmovetheapp.smartmovedriver.ui.trips.MyBidsActivity;
 import com.smartmovetheapp.smartmovedriver.ui.trips.TripAdapter;
+import com.squareup.picasso.Picasso;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
@@ -96,9 +107,20 @@ public class HomeActivity extends BaseActivity
         rvTrips = findViewById(R.id.rv_trips);
         txtEmptyTrips = findViewById(R.id.txt_empty_trips);
 
-        TextView txtProfileName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.txt_user_name);
+        TextView txtProfileName = navigationView.getHeaderView(0).findViewById(R.id.txt_user_name);
         User user = SessionRepository.getInstance().getLoggedInUser();
         txtProfileName.setText(user.getFirstName() + " " + user.getLastName());
+
+        ImageView profilePicture = navigationView.getHeaderView(0).findViewById(R.id.imageView);
+        if(user.getProfilePictureURL() != null && !user.getProfilePictureURL().isEmpty()) {
+            Picasso.get()
+                    .load("https://smartmoveweb.azurewebsites.net" + user.getProfilePictureURL())
+                    .into(profilePicture);
+        }
+        profilePicture.setScaleType(ImageView.ScaleType.FIT_XY);
+
+        TextView txtAverageRating = navigationView.getHeaderView(0).findViewById(R.id.avg_rating);
+        txtAverageRating.setText(user.getAverageRating() + "/5");
 
         rvTrips.setLayoutManager(new LinearLayoutManager(this));
         tripAdapter = new TripAdapter(order ->

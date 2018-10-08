@@ -132,7 +132,7 @@ public class TripDetailActivity extends BaseActivity implements RatingDialog.Rat
                             RatingDialog.getInstance(
                                     TripDetailActivity.this,
                                     order.getOrderId(),
-                                    SessionRepository.getInstance().getDriverId(),
+                                    order.getCustomerId(),
                                     TripDetailActivity.this)
                                     .show();
 
